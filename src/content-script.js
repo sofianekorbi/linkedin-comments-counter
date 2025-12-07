@@ -67,14 +67,57 @@
 
     if (commentButton) {
       console.log(`[LinkedIn Comments Counter] Click detected on comment button`);
-      handleCommentButtonClick();
+      handleCommentButtonClick(commentButton);
     }
+  }
+
+  /**
+   * Check if the post is authored by the current user
+   */
+  function isMyOwnPost(commentButton) {
+    // Find the post container
+    const postContainer = commentButton.closest('.feed-shared-update-v2') ||
+                          commentButton.closest('[data-urn]') ||
+                          commentButton.closest('article') ||
+                          commentButton.closest('.ember-view');
+
+    if (!postContainer) {
+      console.log('[LinkedIn Comments Counter] Post container not found');
+      return false;
+    }
+
+    // Strategy 1: Check for "• Vous" or "• You" text (reliable indicator)
+    const postText = postContainer.textContent || '';
+    if (postText.includes('• Vous') || postText.includes('• You')) {
+      console.log('[LinkedIn Comments Counter] Detected own post (found "• Vous/You") - skipping count');
+      return true;
+    }
+
+    // Strategy 2: Check for edit/delete options (only visible on own posts)
+    const editButton = postContainer.querySelector('[aria-label*="Modifier"]') ||
+                       postContainer.querySelector('[aria-label*="Edit"]');
+    const deleteOption = postContainer.querySelector('[aria-label*="Supprimer"]') ||
+                         postContainer.querySelector('[aria-label*="Delete"]');
+
+    if (editButton || deleteOption) {
+      console.log('[LinkedIn Comments Counter] Detected own post (found edit/delete options) - skipping count');
+      return true;
+    }
+
+    // Strategy 3: Check for data-control-name="edit" attribute
+    const hasEditControl = postContainer.querySelector('[data-control-name="edit"]');
+    if (hasEditControl) {
+      console.log('[LinkedIn Comments Counter] Detected own post (found edit control) - skipping count');
+      return true;
+    }
+
+    return false;
   }
 
   /**
    * Handle comment button click
    */
-  function handleCommentButtonClick() {
+  function handleCommentButtonClick(commentButton) {
     // Protection contre les clics multiples
     const now = Date.now();
     if (now - lastClickTime < clickDebounceDelay) {
@@ -82,6 +125,12 @@
       return;
     }
     lastClickTime = now;
+
+    // Check if this is the user's own post
+    if (isMyOwnPost(commentButton)) {
+      console.log('[LinkedIn Comments Counter] Own post - not counting');
+      return;
+    }
 
     console.log('[LinkedIn Comments Counter] Comment button clicked!');
 
