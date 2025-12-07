@@ -7,6 +7,8 @@
   const COMMENT_BUTTON_SELECTOR = 'button.comments-comment-box__submit-button--cr';
   let isInitialized = false;
   let observer = null;
+  let lastClickTime = 0;
+  let clickDebounceDelay = 500; // 500ms protection contre les clics multiples
 
   /**
    * Initialize the extension
@@ -33,20 +35,12 @@
    * Set up detection for comment button clicks
    */
   function setupCommentButtonDetection() {
-    // Initial detection of existing buttons
-    attachListenersToExistingButtons();
-
     // Set up MutationObserver for dynamically loaded buttons
     observeDOM();
 
-    // Try multiple event types and phases to catch the click
-    // Use capture phase (true) to catch events before LinkedIn
+    // Use ONLY click event delegation with capture phase
+    // This avoids duplicate triggers
     document.addEventListener('click', handleClick, true);
-    document.addEventListener('mousedown', handleClick, true);
-    document.addEventListener('mouseup', handleClick, true);
-
-    // Also try bubble phase as backup
-    document.addEventListener('click', handleClick, false);
 
     console.log('[LinkedIn Comments Counter] Event listeners attached');
   }
@@ -57,27 +51,22 @@
   function attachListenersToExistingButtons() {
     const buttons = document.querySelectorAll(COMMENT_BUTTON_SELECTOR);
     console.log(`[LinkedIn Comments Counter] Found ${buttons.length} comment buttons`);
-
-    // Also try direct listeners on each button
-    buttons.forEach((button, index) => {
-      button.addEventListener('click', (e) => {
-        console.log(`[LinkedIn Comments Counter] Direct listener triggered on button ${index}`);
-        handleCommentButtonClick();
-      }, true);
-    });
   }
 
   /**
    * Handle click events (event delegation approach)
    */
   function handleClick(event) {
+    // Only handle click events, ignore mousedown/mouseup
+    if (event.type !== 'click') return;
+
     const target = event.target;
 
     // Check if the clicked element is a comment button or inside one
     const commentButton = target.closest(COMMENT_BUTTON_SELECTOR);
 
     if (commentButton) {
-      console.log(`[LinkedIn Comments Counter] Click detected on comment button via ${event.type}`);
+      console.log(`[LinkedIn Comments Counter] Click detected on comment button`);
       handleCommentButtonClick();
     }
   }
@@ -86,6 +75,14 @@
    * Handle comment button click
    */
   function handleCommentButtonClick() {
+    // Protection contre les clics multiples
+    const now = Date.now();
+    if (now - lastClickTime < clickDebounceDelay) {
+      console.log('[LinkedIn Comments Counter] Click ignored (debounced)');
+      return;
+    }
+    lastClickTime = now;
+
     console.log('[LinkedIn Comments Counter] Comment button clicked!');
 
     // Increment counter
