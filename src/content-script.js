@@ -16,8 +16,6 @@
   function init() {
     if (isInitialized) return;
 
-    console.log('[LinkedIn Comments Counter] Initializing...');
-
     // Create widget
     Widget.create();
 
@@ -28,7 +26,6 @@
     setInterval(checkForDailyReset, 60000);
 
     isInitialized = true;
-    console.log('[LinkedIn Comments Counter] Initialized successfully');
   }
 
   /**
@@ -41,16 +38,14 @@
     // Use ONLY click event delegation with capture phase
     // This avoids duplicate triggers
     document.addEventListener('click', handleClick, true);
-
-    console.log('[LinkedIn Comments Counter] Event listeners attached');
   }
 
   /**
    * Attach listeners to existing comment buttons
    */
   function attachListenersToExistingButtons() {
-    const buttons = document.querySelectorAll(COMMENT_BUTTON_SELECTOR);
-    console.log(`[LinkedIn Comments Counter] Found ${buttons.length} comment buttons`);
+    // Check for new comment buttons in the DOM
+    document.querySelectorAll(COMMENT_BUTTON_SELECTOR);
   }
 
   /**
@@ -66,7 +61,6 @@
     const commentButton = target.closest(COMMENT_BUTTON_SELECTOR);
 
     if (commentButton) {
-      console.log(`[LinkedIn Comments Counter] Click detected on comment button`);
       handleCommentButtonClick(commentButton);
     }
   }
@@ -82,14 +76,12 @@
                           commentButton.closest('.ember-view');
 
     if (!postContainer) {
-      console.log('[LinkedIn Comments Counter] Post container not found');
       return false;
     }
 
     // Strategy 1: Check for "• Vous" or "• You" text (reliable indicator)
     const postText = postContainer.textContent || '';
     if (postText.includes('• Vous') || postText.includes('• You')) {
-      console.log('[LinkedIn Comments Counter] Detected own post (found "• Vous/You") - skipping count');
       return true;
     }
 
@@ -100,14 +92,12 @@
                          postContainer.querySelector('[aria-label*="Delete"]');
 
     if (editButton || deleteOption) {
-      console.log('[LinkedIn Comments Counter] Detected own post (found edit/delete options) - skipping count');
       return true;
     }
 
     // Strategy 3: Check for data-control-name="edit" attribute
     const hasEditControl = postContainer.querySelector('[data-control-name="edit"]');
     if (hasEditControl) {
-      console.log('[LinkedIn Comments Counter] Detected own post (found edit control) - skipping count');
       return true;
     }
 
@@ -121,18 +111,14 @@
     // Protection contre les clics multiples
     const now = Date.now();
     if (now - lastClickTime < clickDebounceDelay) {
-      console.log('[LinkedIn Comments Counter] Click ignored (debounced)');
       return;
     }
     lastClickTime = now;
 
     // Check if this is the user's own post
     if (isMyOwnPost(commentButton)) {
-      console.log('[LinkedIn Comments Counter] Own post - not counting');
       return;
     }
-
-    console.log('[LinkedIn Comments Counter] Comment button clicked!');
 
     // Increment counter
     const newCount = Storage.incrementCount();
@@ -173,7 +159,6 @@
     const wasReset = Storage.checkAndResetIfNewDay();
 
     if (wasReset) {
-      console.log('[LinkedIn Comments Counter] New day detected - counter reset');
       Widget.updateCount(0);
     }
   }
