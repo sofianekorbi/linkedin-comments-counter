@@ -5,8 +5,8 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 90px;
   z-index: 999999;
 
   /* Glassmorphism effect */
@@ -16,7 +16,7 @@
 
   /* Border and shadow */
   border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4),
               0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 
@@ -34,8 +34,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
+  justify-content: space-around;
+  padding: 10px 8px;
 }
 
 .lcc-widget:hover {
@@ -56,10 +56,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 6px;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
 }
 
 .lcc-widget-header:active {
@@ -81,7 +78,6 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  margin-top: 8px;
 }
 
 .lcc-count-display {
@@ -91,7 +87,7 @@
 }
 
 .lcc-count-number {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 900;
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -123,7 +119,7 @@
   bottom: 0;
   pointer-events: none;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
 }
 
 /* +1 Animation */
@@ -174,7 +170,7 @@
     opacity: 1;
   }
   100% {
-    transform: translateY(90px) rotate(var(--rotation, 360deg));
+    transform: translateY(110px) rotate(var(--rotation, 360deg));
     opacity: 0;
   }
 }
@@ -196,14 +192,14 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .lcc-widget {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 80px;
     bottom: 15px;
     right: 15px;
   }
 
   .lcc-count-number {
-    font-size: 28px;
+    font-size: 32px;
   }
 
   .lcc-icon {
