@@ -1,0 +1,226 @@
+/* LinkedIn Comments Counter - Widget Styles */
+/* Gamified design with vibrant colors and animations */
+
+.lcc-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  z-index: 999999;
+
+  /* Glassmorphism effect */
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.95) 0%, rgba(219, 112, 147, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Border and shadow */
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4),
+              0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+
+  /* Smooth transitions */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* Prevent text selection during drag */
+  user-select: none;
+  -webkit-user-select: none;
+
+  /* Overflow for animations */
+  overflow: visible;
+
+  /* Flexbox for centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.lcc-widget:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(138, 43, 226, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.lcc-widget.lcc-dragging {
+  cursor: grabbing !important;
+  transform: scale(1.08);
+  box-shadow: 0 8px 30px rgba(138, 43, 226, 0.6);
+}
+
+/* Widget Header (Drag Handle) */
+.lcc-widget-header {
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+}
+
+.lcc-widget-header:active {
+  cursor: grabbing;
+}
+
+.lcc-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  opacity: 0.9;
+}
+
+/* Removed bounce animation for cleaner look */
+
+/* Widget Body */
+.lcc-widget-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin-top: 8px;
+}
+
+.lcc-count-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lcc-count-number {
+  font-size: 32px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial Black', sans-serif;
+  line-height: 1;
+}
+
+.lcc-label {
+  display: none; /* Hide label for minimal design */
+}
+
+/* Pulse Animation for Counter */
+.lcc-count-number.lcc-pulse {
+  animation: counterPulse 0.5s ease-out;
+}
+
+@keyframes counterPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* Animation Container */
+.lcc-animation-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* +1 Animation */
+.lcc-plus-one {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffeb3b;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5),
+               0 0 10px rgba(255, 235, 59, 0.8);
+  animation: plusOneRise 1.5s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes plusOneRise {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -150%) scale(1);
+  }
+}
+
+/* Confetti Animation */
+.lcc-confetti {
+  position: absolute;
+  top: -5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 1.5px;
+  animation: confettiFall 2s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(90px) rotate(var(--rotation, 360deg));
+    opacity: 0;
+  }
+}
+
+/* Celebration effect */
+.lcc-animation-container.lcc-celebration {
+  animation: celebrationGlow 1s ease-out;
+}
+
+@keyframes celebrationGlow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lcc-widget {
+    width: 60px;
+    height: 60px;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .lcc-count-number {
+    font-size: 28px;
+  }
+
+  .lcc-icon {
+    font-size: 16px;
+  }
+}
+
+/* Dark mode support (if LinkedIn ever adds it) */
+@media (prefers-color-scheme: dark) {
+  .lcc-widget {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.95) 0%, rgba(233, 30, 99, 0.95) 100%);
+  }
+}
+
+/* Print mode - hide widget */
+@media print {
+  .lcc-widget {
+    display: none !important;
+  }
+}

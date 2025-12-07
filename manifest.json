@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Comments Counter",
+  "version": "1.0.0",
+  "description": "Gamify your LinkedIn commenting activity with a fun counter and animations",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.linkedin.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": [
+        "src/storage.js",
+        "src/widget.js",
+        "src/animations.js",
+        "src/content-script.js"
+      ],
+      "css": ["src/styles/widget.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
